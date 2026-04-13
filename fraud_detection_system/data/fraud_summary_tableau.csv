@@ -1,0 +1,2 @@
+total_transactions,total_amount,fraud_count,fraud_rate_percent,high_risk_count,medium_risk_count,low_risk_count
+8602,2845602.2799999863,334,3.882817949314113,242,101,8259

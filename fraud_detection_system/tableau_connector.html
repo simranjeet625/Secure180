@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FraudShield AI - Tableau Connector</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 40px; 
+            background: #1a1a2e;
+            color: white;
+        }
+        h1 { color: #e94560; }
+        .status { 
+            background: #16213e; 
+            padding: 20px; 
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .btn {
+            background: #e94560;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover { background: #d63447; }
+        table { 
+            border-collapse: collapse; 
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td { 
+            padding: 12px; 
+            text-align: left; 
+            border-bottom: 1px solid #333;
+        }
+        th { background: #16213e; }
+        .high { color: #e74c3c; }
+        .medium { color: #f39c12; }
+        .low { color: #27ae60; }
+    </style>
+</head>
+<body>
+    <h1>🛡️ FraudShield AI - Tableau Web Connector</h1>
+    
+    <div class="status">
+        <h3>📊 Live Data Connection</h3>
+        <p>API Endpoint: <strong>http://localhost:8899/data</strong></p>
+        <p>Status: <span id="status">Connecting...</span></p>
+    </div>
+    
+    <button class="btn" onclick="testConnection()">🔄 Test Connection</button>
+    <button class="btn" onclick="loadData()">📥 Load Data</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        const API_URL = 'http://localhost:8899';
+        
+        async function testConnection() {
+            try {
+                const res = await fetch(API_URL + '/health');
+                const data = await res.json();
+                document.getElementById('status').innerHTML = '✅ Connected';
+                document.getElementById('status').style.color = '#27ae60';
+            } catch (e) {
+                document.getElementById('status').innerHTML = '❌ Not Connected';
+                document.getElementById('status').style.color = '#e74c3c';
+            }
+        }
+        
+        async function loadData() {
+            try {
+                const res = await fetch(API_URL + '/summary');
+                const data = await res.json();
+                
+                let html = '<table><tr><th>Metric</th><th>Value</th></tr>';
+                html += '<tr><td>Total Transactions</td><td>' + data.total_transactions + '</td></tr>';
+                html += '<tr><td>Total Amount</td><td>$' + data.total_amount.toFixed(2) + '</td></tr>';
+                html += '<tr><td>Fraud Count</td><td class="high">' + data.fraud_count + '</td></tr>';
+                html += '<tr><td>High Risk</td><td class="high">' + data.high_risk + '</td></tr>';
+                html += '<tr><td>Medium Risk</td><td class="medium">' + data.medium_risk + '</td></tr>';
+                html += '<tr><td>Low Risk</td><td class="low">' + data.low_risk + '</td></tr>';
+                html += '</table>';
+                
+                document.getElementById('results').innerHTML = html;
+            } catch (e) {
+                document.getElementById('results').innerHTML = 'Error: ' + e.message;
+            }
+        }
+        
+        // Auto test on load
+        testConnection();
+    </script>
+</body>
+</html>
