@@ -22,8 +22,7 @@ Secure180/
 ├── database/
 ├── assets/
 └── README.md
-Installation
-git clone https://github.com/Akkii88/Secure180.git
+
 cd Secure180
 npm install
 npm start
